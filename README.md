@@ -24,7 +24,7 @@ Help > Install New Software...
 
 https://raw.github.com/guari/eclipse-ui-theme/master/com.github.eclipseuitheme.themes.updatesite
 
-* To fix other fonts and colors install the dws_darktheme_pref.epf
+* To fix other fonts and colors install the *dws_darktheme_pref.epf*
 (this file is found in the resource folder)
 
 File > Import... then select General > Preferences
