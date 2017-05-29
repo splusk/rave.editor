@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="ALL" name="Rave Editor Customization">
+    <!-- Implementation specific directories -->
+    <property name="src" location="src" />
+    <property name="build" location="build" />
+    <property name="sourceVer" value="1.8" />
+    <property name="buildVer" value="1.8" />
+
+    <!-- Edit this CARMSYS value to your carmsys -->
+    <property name="CARMSYS" value="/opt/Jeppesen/share/qfa/home/ska58/work/carmusr/carmsys/mr-standard-23.9.40_CARMSYS" />
+    <!-- Edit this ECLIPSE_INSTALL value to your eclipse installation -->
+    <property name="ECLIPSE_INSTALL" value="${CARMSYS}/lib/x86_64_linux/eclipse" />
+
+    <property name="ECLIPSE_PLUGIN_DIR" value="${ECLIPSE_INSTALL}/plugins/" />
+
+    <!-- class path required to compile implementation project classes -->
+    <path id="project.class.path">
+        <pathelement path="${classpath}" />
+        <fileset dir="./lib">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+    
+    <target name="ALL" depends="clean,build" />
+
+    <!-- compile implementation specific classes -->
+    <target name="build">
+        <!-- get the rave.core jar from core -->
+        <mkdir dir="${build}" />
+        <copy todir="${build}" overwrite="true">
+            <fileset dir="${CARMSYS}/lib/x86_64_linux/eclipse/plugins/">
+                <include name="com.jeppesen.carmen.eclipsedev.rave.core_*.jar" />
+            </fileset>
+        </copy>
+        
+        <!-- get the file name of the rave core jar -->
+        <pathconvert property="file.list" pathsep="${line.separator}">
+            <map from="${basedir}/build/" to=""/>
+            <fileset dir="./build">
+                <include name="com.jeppesen.carmen.eclipsedev.rave.core_*.jar"/>
+            </fileset>
+        </pathconvert>
+        <!-- extract file name into a property -->
+        <loadresource property="rave.core.jar">
+            <string value="${file.list}"/>
+            <filterchain>
+                <headfilter lines="1"/>
+            </filterchain>
+        </loadresource>
+
+        <!-- compile -->
+        <javac debug="on" debuglevel="lines,vars,source" source="${sourceVer}" target="${buildVer}" srcdir="${src}" destdir="${build}">
+            <classpath refid="project.class.path" />
+        </javac>
+
+        <!-- copy my class into rave.core.jar -->
+    	<zip destfile="${build}/${rave.core.jar}" update="true">
+    		<zipfileset dir="${build}/com/carmensystems/rave/editors/" 
+    			includes="*.class" prefix="com/carmensystems/rave/editors/"/>
+    	</zip>
+    </target>
+
+    <!-- Copy artefact to eclipse plugin dir-->
+    <target name="install" description="install built artefact in eclipse plugin dir">
+        <chmod dir="${ECLIPSE_PLUGIN_DIR}" perm="uog+wr" includes="**/*"/> 
+        <copy todir="${ECLIPSE_PLUGIN_DIR}" overwrite="true">
+            <fileset dir="${build}">
+                <include name="com.jeppesen.carmen.eclipsedev.rave.core_*.jar" />
+            </fileset>
+        </copy>
+    </target>
+
+    <!-- Clean up -->
+    <target name="clean" description="Clean up build directory">
+        <delete dir="${build}" />
+    </target>
+</project>
