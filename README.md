@@ -5,7 +5,7 @@ To change the colors to something that you want then edit the RGB color values i
 ColorManagerConstants.java
 
 Note in order for this work you need to have write privelages to the CARMSYS, so I recommend setting
-this up first, for example copy the CARMSYS to your local work directory. 
+this up first (for example copy the CARMSYS to your local work directory).
 
 ## Build steps
 This simple uses Apache Ant, but can be easily converted to a Maven project should one want
