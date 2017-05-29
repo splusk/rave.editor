@@ -11,8 +11,10 @@ this up first (for example copy the CARMSYS to your local work directory).
 This simple uses Apache Ant, but can be easily converted to a Maven project should one want
 
 * run ant task
+
 ant -f build.xml
 (note you will need to edit a few properties, for example to your CARMSYS and eclipse installation directory)
+
 ant install
 
 * start eclipse.
