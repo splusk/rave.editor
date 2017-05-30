@@ -19,6 +19,9 @@
         <fileset dir="./lib">
             <include name="**/*.jar" />
         </fileset>
+        <fileset dir="./build">
+            <include name="**/*.jar" />
+        </fileset>
     </path>
     
     <target name="ALL" depends="clean,build" />
@@ -57,6 +60,10 @@
     	<zip destfile="${build}/${rave.core.jar}" update="true">
     		<zipfileset dir="${build}/com/carmensystems/rave/editors/" 
     			includes="*.class" prefix="com/carmensystems/rave/editors/"/>
+    		<zipfileset dir="${build}/com/carmensystems/rave/preferences/" 
+				includes="*.class" prefix="com/carmensystems/rave/preferences/"/>
+    		<zipfileset dir="${src}/resources/" 
+				includes="plugin.xml" prefix=""/>
     	</zip>
     </target>
 

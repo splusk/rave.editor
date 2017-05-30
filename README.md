@@ -1,8 +1,9 @@
 # Introduction
 
 This is a small project that allows you to use a dark theme with the rave editor. 
-To change the colors to something that you want then edit the RGB color values in the java class 
-ColorManagerConstants.java
+To change the colors to something that you want you can find the settings under:
+
+`Window > Preferences > Carmusr > Rave > Editor`
 
 This simple project uses Apache Ant, therefore you will need `ant` and to edit a few properties in the `build.xml` file, for example:
 * Path to your $CARMSYS 
@@ -20,15 +21,18 @@ so what I recommend is setting this up first (for example copy the $CARMSYS to y
 
 `ant install`
 
-* Start eclipse and install the dark theme:
-
-`Help > Install New Software...`
+* Search and download a color dark theme, I like this one:
 
 `https://raw.github.com/guari/eclipse-ui-theme/master/com.github.eclipseuitheme.themes.updatesite`
 
-* To fix other fonts and colors install the *dws_darktheme_pref.epf*
+* Start eclipse and install the dark theme
 
-(this file is found in the resource folder of this project)
+`Help > Install New Software...`
+
+* Fixing fonts and colors for other editors
+
+Some editors do not play well with dark themes (for example python). So to fix this you can install a preference file that will try
+to resolve these gaps. This preference file is found in the **resource** folder of this project and is called **dws_darktheme_pref.epf**.
 
 `File > Import... then select General > Preferences`
 

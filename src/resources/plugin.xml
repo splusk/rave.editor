@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?><plugin>
+  <!-- Extension points provided by this plugin -->
+  <extension-point id="com.carmensystems.rave.raveHover" name="Hover" schema="schema/com.carmensystems.rave.raveHover.exsd"/>
+  <extension-point id="com.carmensystems.rave.builder" name="RaveBuilder" schema="schema/com.carmensystems.rave.builder.exsd"/>
+  <extension-point id="com.carmensystems.rave.editorTab" name="Rave Editor Tab" schema="schema/com.carmensystems.rave.editorTab.exsd"/>
+  <extension-point id="com.carmensystems.rave.CarmsysPathListener" name="CarmsysPathListener" schema="schema/com.carmensystems.rave.CarmsysPathListener.exsd"/>
+  <extension point="com.carmensystems.rave.raveHover">
+    <raveHover class="com.carmensystems.rave.editors.DefaultRaveHover" id="com.carmensystems.rave.editors.DefaultRaveHover" priority="lowest"/>
+  </extension>
+  <!-- Nature and builders -->
+  <extension id="com.carmensystems.rave.nature" name="Rave nature" point="org.eclipse.core.resources.natures">
+    <runtime>
+      <run class="com.carmensystems.rave.RaveNature"/>
+    </runtime>
+    <builder id="com.carmensystems.rave.builder"/>
+  </extension>
+  <extension id="com.carmensystems.rave.builder" name="Rave builder" point="org.eclipse.core.resources.builders">
+    <builder callOnEmptyDelta="true" hasNature="true">
+      <run class="com.carmensystems.rave.builder.RaveBuilder"/>
+    </builder>
+  </extension>
+  <!-- Main menu contributions -->
+  <extension point="org.eclipse.ui.commands">
+    <category description="Carmusr" id="com.carmensystems.rave.menus.generic" name="Carmusr"/>
+    <command categoryId="com.carmensystems.rave.menus.generic" defaultHandler="com.carmensystems.rave.menus.GlobalMenuHandler" id="com.carmensystems.rave.menus.generic.ToggleRulesetMode" name="Toggle show rule sets">
+      <state class="org.eclipse.ui.handlers.RegistryToggleState:true" id="org.eclipse.ui.commands.toggleState"/>
+    </command>
+    <command categoryId="com.carmensystems.rave.menus.generic" defaultHandler="com.carmensystems.rave.menus.GlobalMenuHandler" id="com.carmensystems.rave.menus.generic.ToggleProductMode" name="Toggle show applications">
+      <state class="org.eclipse.ui.handlers.RegistryToggleState:true" id="org.eclipse.ui.commands.toggleState"/>
+    </command>
+    <command categoryId="com.carmensystems.rave.menus.generic" defaultHandler="com.carmensystems.rave.menus.GlobalMenuHandler" id="com.carmensystems.rave.menus.generic.ChooseActiveRuleSets" name="Choose Active Rule sets"/>
+    <command categoryId="com.carmensystems.rave.menus.generic" defaultHandler="com.carmensystems.rave.menus.GlobalMenuHandler" id="com.carmensystems.rave.menus.generic.ChooseActiveApplicationsForRuleSets" name="Choose Applications for Active Rule sets"/>
+    <command categoryId="com.carmensystems.rave.menus.generic" defaultHandler="com.carmensystems.rave.menus.GlobalMenuHandler" id="com.carmensystems.rave.menus.generic.ToggleRulesetEnabled" name="Parse this rule set">
+      <state class="org.eclipse.ui.handlers.RegistryToggleState:false" id="org.eclipse.ui.commands.toggleState"/>
+    </command>
+  </extension>
+  <extension point="org.eclipse.ui.actionSets">
+    <actionSet id="carmenrave.editors.actionSet" label="Rave Editor" visible="false">
+      <menu id="navigate" label="Navigate">
+        <separator name="raveNavGroup"/>
+      </menu>
+      <action class="com.carmensystems.rave.editors.EditorAction" definitionId="carmenrave.editors.command.ShowInRuleset" id="carmenrave.editors.EditorAction.ShowInRuleset" label="Show in Rule Sets" menubarPath="navigate/raveNavGroup"/>
+      <action class="com.carmensystems.rave.editors.EditorAction" definitionId="carmenrave.editors.command.OpenDefinition" id="carmenrave.editors.EditorAction.OpenDefinition" label="Open Definition" menubarPath="navigate/raveNavGroup"/>
+      <action class="com.carmensystems.rave.editors.EditorAction" definitionId="org.eclipse.ui.edit.text.folding.collapse_all" id="org.eclipse.ui.edit.text.folding.collapse_all" label="Collapse all" menubarPath="navigate/raveNavGroup"/>
+      <action class="com.carmensystems.rave.editors.EditorAction" definitionId="org.eclipse.ui.edit.text.folding.expand_all" id="org.eclipse.ui.edit.text.folding.expand_all" label="Expand all" menubarPath="navigate/raveNavGroup"/>
+    </actionSet>
+  </extension>
+  <extension point="org.eclipse.ui.commands">
+    <category id="carmenrave.editors.commands.category" name="Rave commands"/>
+    <command categoryId="carmenrave.editors.commands.category" id="carmenrave.editors.command.OpenDefinition" name="Open Rave Definition"/>
+    <command categoryId="carmenrave.editors.commands.category" id="carmenrave.editors.command.ShowInRuleset" name="Show in Rule Sets"/>
+  </extension>
+  <extension point="org.eclipse.ui.bindings">
+    <scheme id="com.carmensystems.rpc.dwsAcceleratorConfiguration" name="Developer Workspace" parentId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+    <key commandId="carmenrave.editors.command.OpenDefinition" contextId="com.carmensystems.rave.context" schemeId="com.carmensystems.rpc.dwsAcceleratorConfiguration" sequence="F3"/>
+    <key commandId="carmenrave.editors.command.ShowInRuleset" contextId="com.carmensystems.rave.context" schemeId="com.carmensystems.rpc.dwsAcceleratorConfiguration" sequence="F4"/>
+  </extension>
+  <extension point="org.eclipse.ui.actionSetPartAssociations">
+    <actionSetPartAssociation targetID="carmenrave.editors.actionSet">
+      <part id="com.carmensystems.rave.editor"/>
+    </actionSetPartAssociation>
+  </extension>
+  <!-- Editors -->
+  <extension id="com.carmensystems.rave.editor.participant" name="Rave Document Setup Participant" point="org.eclipse.core.filebuffers.documentSetup">
+    <participant class="com.carmensystems.rave.editors.RaveDocumentSetupParticipant" contentTypeId="carmenrave.contenttype.Rave"/>
+  </extension>
+  <extension point="org.eclipse.ui.editors">
+    <editor class="com.carmensystems.rave.editors.RaveEditor" contributorClass="com.carmensystems.rave.editors.RaveEditorActionContributor" icon="icons/rave.png" id="com.carmensystems.rave.editor" name="Rave editor">
+      <contentTypeBinding contentTypeId="carmenrave.contenttype.Rave"/>
+    </editor>
+    <editor class="com.carmensystems.rave.profiler.RaveProfilerFileEditor" icon="icons/stopwatch.png" id="carmenrave.profiler.RaveProfilerFileEditor" name="Rave Profiler Configuration editor">
+      <contentTypeBinding contentTypeId="carmenrave.contenttype.RaveProfiler"/>
+    </editor>
+    <editor class="com.carmensystems.rave.editors.EtableEditor" icon="icons/table.gif" id="carmenrave.editors.EtableEditor" name="Rave External Table editor">
+      <contentTypeBinding contentTypeId="carmenrave.contenttype.ETable"/>
+    </editor>
+    <editor class="com.carmensystems.rave.editors.ParameterEditor" icon="icons/param_file.png" id="carmenrave.editors.ParameterEditor" name="Parameter editor">
+      <contentTypeBinding contentTypeId="carmenrave.contenttype.Parameter"/>
+    </editor>
+    <editor command="dwsexternalpdfviewer" extensions="pdf" id="com.carmensystems.rave.core.externalpdfeditor" name="External Pdf Viewer">
+    </editor>
+  </extension>
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type base-type="org.eclipse.core.runtime.text" file-extensions="rave,,crc" id="carmenrave.contenttype.Rave" name="Rave source" priority="normal">
+      <describer class="com.carmensystems.rave.RaveDescriber"/>
+    </content-type>
+    <content-type base-type="org.eclipse.core.runtime.xml" file-extensions="raveprofiler" id="carmenrave.contenttype.RaveProfiler" name="Rave Profiler Configuration" priority="normal"/>
+    <content-type base-type="org.eclipse.core.runtime.text" file-extensions="etab" id="carmenrave.contenttype.ETable" name="Rave External Table" priority="normal"/>
+    <content-type base-type="org.eclipse.core.runtime.text" file-extensions="param,,parameter" id="carmenrave.contenttype.Parameter" name="Parameter file" priority="low">
+      <describer class="com.carmensystems.rave.ParameterDescriber"/>
+    </content-type>
+    <content-type base-type="org.eclipse.core.runtime.xml" file-extensions="ravedataset" id="carmenrave.contenttype.RaveDataSet" name="Rave Data Selection" priority="normal"/>
+  </extension>
+
+  <!-- Workspace views -->
+  <extension point="org.eclipse.ui.views">
+    <category id="CarmenRave" name="Carmusr Development"/>
+    <view category="CarmenRave" class="com.carmensystems.rave.views.RulesetView" icon="icons/raves.png" id="carmenrave.views.RulesetView" name="Rule Sets"/>
+    <view category="CarmenRave" class="com.carmensystems.rave.views.RaveExpressionsView" icon="icons/rave_expr.png" id="com.carmensystems.rave.views.RaveExpressionsView" name="Rave Expressions"/>
+  </extension>
+  <extension point="org.eclipse.ui.perspectives">
+    <perspective class="com.carmensystems.rave.perspectives.CarmUsrPerspective" icon="icons/DWS.png" id="carmenrave.perspectives.CarmUsrPerspective" name="Carmusr"/>
+  </extension>
+  <extension point="org.eclipse.ui.perspectiveExtensions">
+    <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
+   	  <view id="org.eclipse.ui.navigator.ProjectExplorer" ratio="0.4" relationship="left" relative="org.eclipse.ui.editorss"/>
+    </perspectiveExtension>
+  </extension>
+  <extension point="org.eclipse.ui.contexts">
+    <context id="com.carmensystems.rave.context" name="Editing Rave source" parentId="org.eclipse.ui.textEditorScope"/>
+  </extension>
+
+  <extension point="org.eclipse.ui.navigator.viewer">
+    <viewerActionBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+      <includes>
+        <actionExtension pattern="com.carmen.studio.rpc.PyRunActionProvider"/>
+        <actionExtension pattern="com.carmensystems.rave.views.explorer.RulesetActionProvider"/>
+        <actionExtension pattern="com.carmensystems.rave.views.explorer.ParameterActionProvider"/>
+        <actionExtension pattern="com.carmensystems.rave.views.explorer.CarmenResourceActionProvider"/>
+      </includes>
+    </viewerActionBinding>
+    <viewerActionBinding viewerId="org.eclipse.ui.navigator.CommonNavigator">
+      <includes>
+        <actionExtension pattern="com.carmen.studio.rpc.PyRunActionProvider"/>
+        <actionExtension pattern="com.carmensystems.rave.views.explorer.RulesetActionProvider"/>
+        <actionExtension pattern="com.carmensystems.rave.views.explorer.ParameterActionProvider"/>
+        <actionExtension pattern="com.carmensystems.rave.views.explorer.CarmenResourceActionProvider"/>
+      </includes>
+    </viewerActionBinding>
+  </extension>
+  <extension point="org.eclipse.ui.views">
+    <category id="CarmenRave" name="Carmen Rave"/>
+    <view category="CarmenRave" class="com.carmensystems.rave.metrics.RaveMetricView" icon="icons/fkey.png" id="com.carmensystems.rave.metrics.RaveMetricView" name="Rave Metrics"/>
+  </extension>
+  <extension point="com.carmensystems.rave.builder">
+    <raveBuilder class="com.carmensystems.rave.metrics.RaveMetricBuilder" id="com.carmensystems.rave.metrics.RaveMetricBuilder"/>
+  </extension>
+  <extension point="org.eclipse.core.expressions.propertyTesters">
+    <propertyTester class="com.carmensystems.rave.properties.RavePropertyTester" id="com.carmensystems.rave.core.RavePropertyTester" namespace="com.carmensystems.rave.core.RavePropertyTester" properties="isRuleset" type="java.lang.Object"/>
+  </extension>
+
+  <!-- Project properties -->
+  <extension point="org.eclipse.ui.propertyPages">
+    <page class="com.carmensystems.rave.properties.CarmusrPropertyPage" id="carmenrave.properties.CarmusrPropertyPage" name="CarmUsr">
+      <enabledWhen>
+        <adapt type="org.eclipse.core.resources.IProject"/>
+      </enabledWhen>
+    </page>
+    <page category="carmenrave.properties.CarmusrPropertyPage" class="com.carmensystems.rave.properties.RavePropertyPage" id="com.carmensystems.rave.properties.RavePropertyPage" name="Rave">
+      <enabledWhen>
+        <adapt type="org.eclipse.core.resources.IProject"/>
+      </enabledWhen>
+    </page>
+    <page category="carmenrave.properties.CarmusrPropertyPage" class="com.carmensystems.rave.properties.PathMappingsPropertyPage" id="com.carmensystems.rave.properties.PathMappingsPropertyPage" name="Path Mappings">
+      <enabledWhen>
+        <adapt type="org.eclipse.core.resources.IProject"/>
+      </enabledWhen>
+    </page>
+    <page class="com.carmensystems.rave.properties.RulesetPropertyPage" id="com.carmensystems.rave.properties.RulesetPropertyPage" name="Rule Set">
+      <enabledWhen>
+        <test property="com.carmensystems.rave.core.RavePropertyTester.isRuleset"/>
+      </enabledWhen>
+    </page>
+  </extension>
+
+  <extension point="org.eclipse.ui.propertyPages">
+    <page category="carmenrave.properties.CarmusrPropertyPage" class="com.carmensystems.rave.metrics.RavemetricsPropertyPage" id="com.carmensystems.rave.metrics.RavemetricsPropertyPage" name="Rave Metrics">
+      <enabledWhen>
+        <adapt type="org.eclipse.core.resources.IProject"/>
+      </enabledWhen>
+    </page>
+  </extension>
+
+  <!-- Project Explorer -->
+  <extension point="org.eclipse.ui.navigator.navigatorContent">
+    <navigatorContent activeByDefault="true" contentProvider="com.carmensystems.rave.views.explorer.CarmusrContentProvider" icon="icons/DWS.png" id="com.carmensystems.rave.views.explorer.CarmusrContent" labelProvider="com.carmensystems.rave.views.explorer.CarmusrLabelProvider" name="Carmusr navigator content" priority="normal">
+      <override policy="InvokeAlwaysRegardlessOfSuppressedExt" suppressedExtensionId="org.eclipse.ui.navigator.resourceContent"/>
+      <triggerPoints>
+        <or>
+          <instanceof value="org.eclipse.core.resources.IProject"/>
+          <instanceof value="com.carmensystems.rave.views.explorer.CarmenRoot"/>
+        </or>
+      </triggerPoints>
+      <possibleChildren>
+        <or>
+          <instanceof value="org.eclipse.core.resources.IResource"/>
+          <instanceof value="com.carmensystems.rave.views.explorer.CarmenRoot"/>
+          <instanceof value="com.carmensystems.rave.views.explorer.Shortcut"/>
+        </or>
+      </possibleChildren>
+      <commonSorter class="com.carmensystems.rave.views.explorer.CarmenResourceSorter" id="com.carmensystems.rave.views.explorer.CarmenResourceSorter"/>
+    </navigatorContent>
+  </extension>
+  <extension point="org.eclipse.ui.navigator.viewer">
+    <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+      <includes>
+        <contentExtension pattern="com.carmensystems.rave.views.explorer.CarmusrContent"/>
+      </includes>
+    </viewerContentBinding>
+  </extension>
+
+  <!-- Preference pages -->
+  <extension point="org.eclipse.ui.preferencePages">
+    <page class="com.carmensystems.rave.preferences.CarmusrPreferencesPage" id="com.carmensystems.rave.preferences.CarmusrPreferences" name="Carmusr"/>
+    <page category="com.carmensystems.rave.preferences.CarmusrPreferences" class="com.carmensystems.rave.preferences.DirectoriesPreferencesPage" id="com.carmensystems.rave.preferences.DirectoriesPreferences" name="Directories"/>
+  </extension>
+  <extension point="org.eclipse.ui.preferencePages">
+    <page category="com.carmensystems.rave.preferences.CarmusrPreferences" class="com.carmensystems.rave.preferences.RavePreferences" id="com.carmensystems.rave.preferences.RavePreferences" name="Rave"/>
+  </extension>
+  <extension point="org.eclipse.ui.preferencePages">
+    <page category="com.carmensystems.rave.preferences.RavePreferences" class="com.carmensystems.rave.preferences.RaveColorPreferences" id="com.carmensystems.rave.preferences.RaveColorPreferences" name="Editor"/>
+  </extension>
+  <extension point="org.eclipse.core.runtime.preferences">
+    <initializer class="com.carmensystems.rave.preferences.RavePreferenceInitializer"/>
+  </extension>
+  <extension point="org.eclipse.ui.decorators">
+    <decorator adaptable="false" class="com.carmensystems.rave.views.explorer.ProjectResourceDecorator" id="com.carmensystems.rave.views.explorer.ProjectResourceDecorator" label="Carmusr Decorator" lightweight="true" state="true">
+      <enablement>
+        <or>
+          <objectClass name="org.eclipse.core.resources.IFolder"/>
+          <objectClass name="org.eclipse.core.resources.IFile"/>
+        </or>
+      </enablement>
+    </decorator>
+  </extension>
+
+  <!-- Commands for Ruleset tree -->
+  <extension point="org.eclipse.ui.commands">
+    <category description="Command Category Description" id="com.carmensystems.rave.menus.Tree" name="Command Category Name"/>
+    <command categoryId="com.carmensystems.rave.menus.Tree" defaultHandler="com.carmensystems.rave.views.RulesetMenuHandler" id="com.carmensystems.rave.menus.GoToDefinition" name="Go to definition"/>
+    <command categoryId="com.carmensystems.rave.menus.Tree" defaultHandler="com.carmensystems.rave.views.RulesetMenuHandler" id="com.carmensystems.rave.menus.RulesetProperties" name="Rule set properties"/>
+    <command categoryId="com.carmensystems.rave.menus.Tree" defaultHandler="com.carmensystems.rave.views.RulesetMenuHandler" id="com.carmensystems.rave.menus.ReloadRuleset" name="Reload rule set"/>
+    <command categoryId="com.carmensystems.rave.menus.Tree" defaultHandler="com.carmensystems.rave.views.RulesetMenuHandler" id="com.carmensystems.rave.menus.AddWatch" name="Add watch"/>
+  </extension>
+  <extension point="org.eclipse.ui.menus">
+    <menuContribution locationURI="toolbar:carmenrave.views.RulesetView?before=com.carmensystems.rpc.commands.Compile">
+      <command commandId="com.carmensystems.rave.menus.generic.ChooseActiveRuleSets" icon="icons/active_rule_set.png" label="Choose active rule sets"/>
+      <separator name="additions" visible="false"/>
+      <separator name="nav"/>
+    </menuContribution>
+    <menuContribution locationURI="toolbar:carmenrave.views.RulesetView?after=com.carmensystems.rave.menus.generic.ChooseActiveRuleSets">
+      <command commandId="com.carmensystems.rave.menus.generic.ChooseActiveApplicationsForRuleSets" icon="icons/applications_for_active_rule_set.png" label="Choose applications for active rule sets"/>
+      <separator name="additions" visible="false"/>
+      <separator name="nav"/>
+    </menuContribution>
+    <menuContribution locationURI="popup:org.eclipse.ui.popup.any?before=com.carmensystems.rpc.commands.Compile">
+      <command commandId="com.carmensystems.rave.menus.generic.ChooseActiveRuleSets" icon="icons/active_rule_set.png" label="Choose Active Rule sets" style="push" tooltip="Choose active rule sets">
+        <visibleWhen checkEnabled="false">
+          <with variable="activeMenuSelection">
+            <iterate ifEmpty="false" operator="and">
+              <adapt type="org.eclipse.core.resources.IProject"/>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+    </menuContribution>
+    <menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=com.carmensystems.rave.menus.generic.ChooseActiveRuleSets">
+      <command commandId="com.carmensystems.rave.menus.generic.ChooseActiveApplicationsForRuleSets" icon="icons/applications_for_active_rule_set.png" label="Choose Applications for Active Rule sets" style="push" tooltip="Choose applications for active rule sets">
+        <visibleWhen checkEnabled="false">
+          <with variable="activeMenuSelection">
+            <iterate ifEmpty="false" operator="and">
+              <adapt type="org.eclipse.core.resources.IProject"/>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+    </menuContribution>
+    <menuContribution locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+      <separator name="nav"/>
+      <command commandId="com.carmensystems.rave.menus.GoToDefinition" label="Open in editor" style="push">
+        <visibleWhen>
+            <with variable="activeMenuSelection">
+            <iterate ifEmpty="false" operator="and">
+              <or>
+                <adapt type="com.carmensystems.parsers.rave.parser.RaveCompilationUnit"/>
+                <adapt type="com.carmensystems.parsers.rave.parser.Ruleset"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+      <command commandId="com.carmensystems.rave.menus.RulesetProperties" label="Properties" style="push">
+        <visibleWhen>
+          <with variable="activeMenuSelection">
+            <iterate ifEmpty="false" operator="and">
+              <or>
+                <adapt type="com.carmensystems.parsers.rave.parser.Ruleset"/>
+              </or>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+      <separator name="additions"/>
+      <command commandId="carmenrave.editors.command.ShowInRuleset" label="Show in Rule Sets" style="push">
+        <visibleWhen checkEnabled="false">
+          <with variable="activeMenuSelection">
+            <iterate ifEmpty="false" operator="and">
+              <adapt type="com.carmensystems.parsers.rave.parser.RaveDefinition"/>
+            </iterate>
+          </with>
+        </visibleWhen>
+      </command>
+      </menuContribution>
+   </extension>
+
+   <!-- Commands for Navigator -->
+  <extension point="org.eclipse.ui.commands">
+    <category description="Carmen" id="com.carmensystems.rave.views.explorer.menus.category" name="Carmen"/>
+    <command categoryId="com.carmensystems.rave.views.explorer.menus.category" id="com.carmensystems.rave.views.explorer.menus.ProjectProperties" name="Project properties"/>
+  </extension>
+  <extension point="org.eclipse.ui.handlers">
+    <handler class="com.carmensystems.rave.views.explorer.CarmenNavigatorHandler" commandId="com.carmensystems.rave.views.explorer.menus.ProjectProperties"/>
+  </extension>
+
+   <!-- Extensions for markers and annotations -->
+  <extension id="com.carmensystems.rave.ProblemMarker" name="Rave problem" point="org.eclipse.core.resources.markers">
+    <persistent value="false"/>
+    <super type="org.eclipse.core.resources.problemmarker"/>
+    <super type="org.eclipse.core.resources.textmarker"/>
+  </extension>
+
+  <extension point="org.eclipse.ui.editors.annotationTypes">
+    <type markerSeverity="2" markerType="com.carmensystems.rave.ProblemMarker" name="com.carmensystems.rave.RaveError" super="org.eclipse.ui.workbench.texteditor.error"/>
+    <type markerSeverity="1" markerType="com.carmensystems.rave.ProblemMarker" name="com.carmensystems.rave.RaveWarning" super="org.eclipse.ui.workbench.texteditor.warning"/>
+  </extension>
+
+  <extension point="org.eclipse.ui.editors.markerAnnotationSpecification">
+    <specification annotationImageProvider="com.carmensystems.rave.quickfix.RaveAnnotationImageProvider" annotationType="com.carmensystems.rave.RaveError"/>
+    <specification annotationImageProvider="com.carmensystems.rave.quickfix.RaveAnnotationImageProvider" annotationType="com.carmensystems.rave.RaveWarning"/>
+  </extension>
+
+  <!-- Extensions to Python editing -->
+  <extension point="org.eclipse.core.runtime.adapters">
+    <factory adaptableType="com.carmensystems.rave.views.InstanceObjectDefinition" class="com.carmensystems.rave.views.InstanceObjectAdapterFactory">
+      <adapter type="com.carmensystems.parsers.rave.parser.RaveDefinition"/>
+    </factory>
+    <factory adaptableType="com.carmensystems.rave.views.InstanceObjectCompilationUnit" class="com.carmensystems.rave.views.InstanceObjectAdapterFactory">
+      <adapter type="com.carmensystems.parsers.rave.parser.RaveCompilationUnit"/>
+    </factory>
+  </extension>
+  <extension point="org.eclipse.core.runtime.adapters">
+    <factory adaptableType="com.carmensystems.rave.views.explorer.CarmenRoot" class="com.carmensystems.rave.util.CarmusrProjectAdapterFactory">
+      <adapter type="com.carmensystems.rave.CarmusrProject"/>
+    </factory>
+  </extension>
+  <extension point="org.eclipse.core.filebuffers.annotationModelCreation">
+    <factory class="com.carmensystems.rave.quickfix.RaveAnnotationModelFactory" contentTypeId="carmenrave.contenttype.Rave"/>
+  </extension>
+  <!-- Commenting out unimplemented, thus confusing and misleading, Rave Editor Font preference setting.
+       Uncomment if/when we really want to implement it.
+  <extension point="org.eclipse.ui.themes">
+    <themeElementCategory id="com.carmensystems.rave.theme" label="Rave">
+      <description>Colors and fonts for Rave editing</description>
+    </themeElementCategory>
+    <fontDefinition categoryId="com.carmensystems.rave.theme" defaultsTo="org.eclipse.jface.textfont" id="com.carmensystems.rave.theme.textFont" label="Rave Editor text font">
+      <description>The text font used by Rave source code editors.</description>
+    </fontDefinition>
+  </extension>
+  -->
+
+  <!-- Prevent CMS specific help from showing in MR version -->
+  <extension point="org.eclipse.ui.activities">
+    <activity id="com.jeppesen.jcms.cms.help" name="CMS Help">
+      <enabledWhen>
+        <systemTest property="com.jeppesen.jcms.system.variant.cms" value="true"/>
+      </enabledWhen>
+    </activity>
+    <activityPatternBinding activityId="com.jeppesen.jcms.cms.help" pattern="com.jeppesen.jcms.gantteditor.help/toc.xml"/>
+    <activityPatternBinding activityId="com.jeppesen.jcms.cms.help" pattern="com.jeppesen.jcms.dataeditor.help/toc.xml"/>
+    <activityPatternBinding activityId="com.jeppesen.jcms.cms.help" pattern="com.jeppesen.jcms.cms.help.java/toc.xml"/>
+    <activityPatternBinding activityId="com.jeppesen.jcms.cms.help" pattern="com.jeppesen.jcms.cms.help.python/toc.xml"/>
+  </extension>
+</plugin>

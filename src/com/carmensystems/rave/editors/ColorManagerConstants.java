@@ -14,6 +14,5 @@ public class ColorManagerConstants {
 	public static final RGB PURPLE = new RGB(128, 64, 128);
 	public static final RGB LIGHT_BLUE = new RGB(0, 124, 176);
 	public static final RGB DARK_BLUE = new RGB(0, 83, 135);
-	public static final RGB DARK_BLUE_3 = new RGB(0, 83, 135);
 
 }
