@@ -51,7 +51,7 @@
             </filterchain>
         </loadresource>
 
-    	<!-- Get the plugin xml, and add your snippet to it -->
+    	<!-- Get the plugin xml from core and then add your snippet to it -->
         <unzip src="${build}/${rave.core.jar}"
             dest="./build/resources">
             <patternset>
