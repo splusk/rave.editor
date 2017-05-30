@@ -27,10 +27,10 @@ public class ColorManager {
 		RGB storeColor = PreferenceConverter.getColor(store, c);
 		
 		if (storeColor.equals(PreferenceConverter.COLOR_DEFAULT_DEFAULT)) {
-			storeColor = PreferenceConverter.getColor(store, RaveColorPreferences.DEFAULT_COLOR);;
+			storeColor = PreferenceConverter.getColor(store, RaveColorPreferences.DEFAULT_COLOR);
 		}
-		return storeColor;
 
+		return storeColor;
 	}
 
 	public void dispose() {
