@@ -7,13 +7,9 @@ import org.eclipse.jface.preference.PreferenceConverter;
 import com.carmensystems.rave.CarmusrPlugin;
 import com.carmensystems.rave.editors.ColorManagerConstants;
 
-public class RavePreferenceInitializer extends AbstractPreferenceInitializer {
+public class RaveColorPreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = CarmusrPlugin.getDefault().getPreferenceStore();
-		
-		store.setDefault(RavePreferences.PREF_DISABLEBUILDERS, false);
-		store.setDefault(RavePreferences.PREF_MARKOCCURANCIES, true);
-		store.setDefault(RavePreferences.PREF_COMPILER_PREFERENCES, getDefaultPreferenceScript());
 		
 		PreferenceConverter.setDefault(store, RaveColorPreferences.DEFAULT_COLOR, ColorManagerConstants.CREAM);
 		PreferenceConverter.setDefault(store, RaveColorPreferences.STRING_COLOR, ColorManagerConstants.GREEN);
@@ -26,13 +22,4 @@ public class RavePreferenceInitializer extends AbstractPreferenceInitializer {
 		PreferenceConverter.setDefault(store, RaveColorPreferences.BUILTIN_COLOR, ColorManagerConstants.DARK_BLUE);
 	}
 
-	private static String getDefaultPreferenceScript() {
-		String value = System.getProperty(RavePreferences.PREF_COMPILER_PREFERENCES, "");
-		if (!value.isEmpty()) {
-			return value;
-		} else {
-			value = System.getenv("RAVE_COMPILER_PREFERENCES");
-			return value != null ? value : "";
-		}
-	}
 }

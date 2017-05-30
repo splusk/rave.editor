@@ -214,6 +214,9 @@
   <extension point="org.eclipse.core.runtime.preferences">
     <initializer class="com.carmensystems.rave.preferences.RavePreferenceInitializer"/>
   </extension>
+  <extension point="org.eclipse.core.runtime.preferences">
+    <initializer class="com.carmensystems.rave.preferences.RaveColorPreferenceInitializer"/>
+  </extension>
   <extension point="org.eclipse.ui.decorators">
     <decorator adaptable="false" class="com.carmensystems.rave.views.explorer.ProjectResourceDecorator" id="com.carmensystems.rave.views.explorer.ProjectResourceDecorator" label="Carmusr Decorator" lightweight="true" state="true">
       <enablement>
