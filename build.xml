@@ -36,7 +36,6 @@
             </fileset>
         </copy>
 
-
         <!-- get the file name of the rave core jar -->
         <pathconvert property="file.list" pathsep="${line.separator}">
             <map from="${basedir}/build/" to=""/>
@@ -52,6 +51,7 @@
             </filterchain>
         </loadresource>
 
+    	<!-- Get the plugin xml, and add your snippet to it -->
         <unzip src="${build}/${rave.core.jar}"
             dest="./build/resources">
             <patternset>
