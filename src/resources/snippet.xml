@@ -1,0 +1,8 @@
+<!-- rave.editor.color.settings -->
+<extension point="org.eclipse.ui.preferencePages">
+    <page category="com.carmensystems.rave.preferences.RavePreferences" class="com.carmensystems.rave.preferences.RaveColorPreferences" id="com.carmensystems.rave.preferences.RaveColorPreferences" name="Editor"/>
+</extension>
+<extension point="org.eclipse.core.runtime.preferences">
+    <initializer class="com.carmensystems.rave.preferences.RaveColorPreferenceInitializer"/>
+</extension>
+</plugin>

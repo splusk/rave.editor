@@ -35,7 +35,8 @@
                 <include name="com.jeppesen.carmen.eclipsedev.rave.core_*.jar" />
             </fileset>
         </copy>
-        
+
+
         <!-- get the file name of the rave core jar -->
         <pathconvert property="file.list" pathsep="${line.separator}">
             <map from="${basedir}/build/" to=""/>
@@ -51,6 +52,28 @@
             </filterchain>
         </loadresource>
 
+        <unzip src="${build}/${rave.core.jar}"
+            dest="./build/resources">
+            <patternset>
+                <include name="plugin.xml"/>
+            </patternset>
+        </unzip>
+        <exec executable="sed">
+            <arg value="-i" />
+            <arg value="/rave.editor.color/q" />
+            <arg value="./build/resources/plugin.xml" />
+        </exec>
+        <exec executable="sed">
+            <arg value="-i" />
+            <arg value="$d" />
+            <arg value="./build/resources/plugin.xml" />
+        </exec>
+        <exec executable="sed">
+            <arg value="-i" />
+            <arg value="$r ./src/resources/snippet.xml" />
+            <arg value="./build/resources/plugin.xml" />
+        </exec>
+
         <!-- compile -->
         <javac debug="on" debuglevel="lines,vars,source" source="${sourceVer}" target="${buildVer}" srcdir="${src}" destdir="${build}">
             <classpath refid="project.class.path" />
@@ -62,8 +85,8 @@
     			includes="*.class" prefix="com/carmensystems/rave/editors/"/>
     		<zipfileset dir="${build}/com/carmensystems/rave/preferences/" 
 				includes="*.class" prefix="com/carmensystems/rave/preferences/"/>
-    		<zipfileset dir="${src}/resources/" 
-				includes="plugin.xml" prefix=""/>
+            <zipfileset dir="${build}/resources/"
+                includes="plugin.xml" prefix=""/>
     	</zip>
     </target>
 

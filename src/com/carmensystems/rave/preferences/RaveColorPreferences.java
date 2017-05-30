@@ -47,8 +47,7 @@ public class RaveColorPreferences extends FieldEditorPreferencePage implements I
 				new ColorFieldEditor(BUILTIN_COLOR, "&Builtin", this.getFieldEditorParent()));
 	}
 
-	public void init(IWorkbench workbench) {
-	}
+	public void init(IWorkbench workbench) { }
 
 	public boolean performOk() {
 		if (super.performOk()) {

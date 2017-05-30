@@ -11,7 +11,7 @@ This simple project uses Apache Ant, therefore you will need `ant` and to edit a
 * Path to your $CARMSYS 
 * Path to your eclipse installation, which should be the one bundled within your $CARMSYS
 
-**Note** In order for this work properly you need to have write privelages to the $CARMSYS, 
+**Note** In order for this to work properly you need to have write privelages to the $CARMSYS, 
 so what I recommend is setting this up first (for example copy the $CARMSYS to your local work directory).
 
 
