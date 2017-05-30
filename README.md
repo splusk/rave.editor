@@ -5,6 +5,8 @@ To change the colors to something that you want you can find the settings under:
 
 `Window > Preferences > Carmusr > Rave > Editor`
 
+<img src="./src/resources/pref_settings.png" alt="Settings" width="700" height="500"/>
+
 This simple project uses Apache Ant, therefore you will need `ant` and to edit a few properties in the `build.xml` file, for example:
 * Path to your $CARMSYS 
 * Path to your eclipse installation, which should be the one bundled within your $CARMSYS
@@ -21,9 +23,9 @@ so what I recommend is setting this up first (for example copy the $CARMSYS to y
 
 `ant install`
 
-* Search and download a color dark theme, I like this one:
+* Search and download a dark theme, I like this one:
 
-`https://raw.github.com/guari/eclipse-ui-theme/master/com.github.eclipseuitheme.themes.updatesite`
+https://raw.github.com/guari/eclipse-ui-theme/master/com.github.eclipseuitheme.themes.updatesite
 
 * Start eclipse and install the dark theme
 
